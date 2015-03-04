@@ -1,3 +1,5 @@
+import sys
+
 numbers = {
   '1': 'one',
   '2': 'two',
@@ -27,21 +29,27 @@ def number_word (n):
 
   word = ''
   if l > 3:
-    word += numbers[n[l-4]] + ' thousand '
-    word += 'and ' if n[l-3] in numbers or n[-1] in numbers else ''
-  if l > 2 and n[l-3] in numbers:
-    word += numbers[n[l-3]] + ' hundred '
-    word += 'and ' if n[l-2] in numbers or n[-1] in numbers else ''
-  if l > 1 and n[l-2] in numbers:
-    if n[l-2] == '1':
-      word += numbers[n[l-2:]] if n[l-2:] in numbers else numbers[n[-1]] + 'teen'
+    word += numbers[n[-4]] + ' thousand '
+    word += 'and ' if (n[-2] in numbers or n[-1] in numbers) and not n[-3] in numbers else ''
+  if l > 2 and n[-3] in numbers:
+    word += numbers[n[-3]] + ' hundred '
+    word += 'and ' if n[-2] in numbers or n[-1] in numbers else ''
+  if l > 1 and n[-2] in numbers:
+    if n[-2] == '1':
+      word += numbers[n[-2:]] if n[-2:] in numbers else numbers[n[-1]] + 'teen'
     else:
-      word += numbers[n[l-2]+'0']+' ' if n[l-2]+'0' in numbers else numbers[n[l-2]] + 'ty '
-    if n[-1] == '0' or n[l-2] == '1':
+      word += numbers[n[-2]+'0']+' ' if n[-2]+'0' in numbers else numbers[n[-2]] + 'ty '
+    if n[-1] == '0' or n[-2] == '1':
       return word
   word += numbers[n[-1]] if n[-1] in numbers else ''
   return word
 
 # for i in range(1,1001):
 #   print(number_word(i))
-print(sum(len(number_word(i).replace(' ', '')) for i in range(1,1001)))
+#print(sum(len(number_word(i).replace(' ', '')) for i in range(1,1001)))
+
+#for i in range(1,10000):
+#    print('{} = {}'.format(i, number_word(i)))
+
+i=sys.argv[1]
+print('{} = {}'.format(i, number_word(i)))
